@@ -1,5 +1,8 @@
 import random
+from pyfiglet import Figlet
 
+f = Figlet(font='slant')
+print(f.renderText('To Do Or Not To Do'))
 
 list_to_do_items = []
 
@@ -104,13 +107,6 @@ def delete_items_by_tag(tag):
 
 
 
-
-
-# TODO NEED NEW WELCOME THING
-# print("Welcome To To Do List")
-# print("1. Login")
-# print("2. Sign Up")
-# print("3. Exit")
 
 using_tool = True
 
