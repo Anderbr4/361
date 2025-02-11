@@ -2,7 +2,7 @@ import random
 from pyfiglet import Figlet
 
 
-list_to_do_items = []
+LIST_TO_DO_ITEMS = []
 
 # create class todo item that stores to do item logic
 
@@ -31,12 +31,13 @@ class ToDoItem:
             print("\n")
             if confirmation == "Y":
                 print("\n You have modified the item!\n")
+                self.item_name = new_item_name
+                self.item_tag = new_item_tag
+                self.item_comment = new_item_comment
+                self.item_due_date = new_item_due_date
                 gathering = False
-
-        self.item_name = new_item_name
-        self.item_tag = new_item_tag
-        self.item_comment = new_item_comment
-        self.item_due_date = new_item_due_date
+            elif confirmation == "N":
+                gathering = False
 
 
 
@@ -59,7 +60,7 @@ def prompt_create_to_do_item():
         if confirmation == "Y":
             gathering = False
 
-    list_to_do_items.append(create_to_do_item(item_name,item_tag, item_comment, item_due_date))
+    LIST_TO_DO_ITEMS.append(create_to_do_item(item_name,item_tag, item_comment, item_due_date))
     print("\n You have created the item!\n")
 
 def view_all_items():
@@ -69,35 +70,37 @@ def view_all_items():
 
 
         print("\n Here are the remaining to do items: ")
-        for item in list_to_do_items:
+        for item in LIST_TO_DO_ITEMS:
             item.view_item_details()
     elif user_view_choice == 2:
         user_tag = input("Enter tag: ")
         print("\n Here are the remaining to do items: ")
-        for item in list_to_do_items:
+        for item in LIST_TO_DO_ITEMS:
             if item.item_tag == user_tag:
                 item.view_item_details()
     else:
         print("input not recognized returning to main.\n")
 
 
-
 def modify_to_do_item(item_id):
 
-    for item in list_to_do_items:
+    for item in LIST_TO_DO_ITEMS:
         if item.item_id == item_id:
             item.modify_this_item()
 
 def delete_items_by_tag(tag):
-
+    new_item_list = []
     delete_confirm= input("Are you sure you want to delete these items Y/N? Doing so is permanement: ")
     if(delete_confirm == "Y"):
-        for item in list_to_do_items:
-            if item.item_tag == tag:
-                list_to_do_items.remove(item)
+        for item in LIST_TO_DO_ITEMS:
+            if item.item_tag != tag:
+                new_item_list.append(item)
+
         print("Deleted all items with tag: "+str(tag)+"\n")
+        return new_item_list
     else:
         print("Canceled Delete. Returning to main menu\n")
+        return "none"
 
 
 
@@ -107,11 +110,11 @@ print(f.renderText('To Do Or Not To Do'))
 
 
 
-list_to_do_items.append(create_to_do_item("test1",'test', 'just a test1', '02/10/25'))
-list_to_do_items.append(create_to_do_item("test2",'test', 'just a test2', '02/10/25'))
-list_to_do_items.append(create_to_do_item("test3",'test', 'just a test3', '02/10/25'))
-list_to_do_items.append(create_to_do_item("test4",'test', 'just a test4', '02/10/25'))
-list_to_do_items.append(create_to_do_item("Modify",'Modify', 'to be modified', '02/10/25'))
+LIST_TO_DO_ITEMS.append(create_to_do_item("test1",'test', 'just a test1', '02/10/25'))
+LIST_TO_DO_ITEMS.append(create_to_do_item("test2",'test', 'just a test2', '02/10/25'))
+LIST_TO_DO_ITEMS.append(create_to_do_item("test3",'test', 'just a test3', '02/10/25'))
+LIST_TO_DO_ITEMS.append(create_to_do_item("test4",'test', 'just a test4', '02/10/25'))
+LIST_TO_DO_ITEMS.append(create_to_do_item("Modify",'Modify', 'to be modified', '02/10/25'))
 
 
 using_tool = True
@@ -134,7 +137,9 @@ while(using_tool):
         modify_to_do_item(item_id)
     elif user_input == "4":
         tag = input("Please enter tag to delete: ")
-        delete_items_by_tag(tag)
+        temp_deletion = delete_items_by_tag(tag)
+        if type(temp_deletion) is list:
+            LIST_TO_DO_ITEMS = temp_deletion
     elif user_input == "5":
         print("exiting")
         using_tool = False
